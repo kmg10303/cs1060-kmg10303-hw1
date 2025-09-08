@@ -1,3 +1,5 @@
+## Kavi Gasper -- kmg10303 -- kavigasper@college.harvard.edu
+
 ## Project info
 
 **Lovable URL**: https://lovable.dev/projects/76258c87-64e2-442f-a775-cbd0befef9ed
@@ -40,3 +42,6 @@ Most of my work was fixing a few UI errors that the AI had trouble noticing, suc
 ## Challenges
 
 The biggest challenge was getting a good amount of news sources while still being able to keep track of the general political leanings of each news source. Because of this, I could only use a select number of news sources. 
+
+## Hours
+4 hours
