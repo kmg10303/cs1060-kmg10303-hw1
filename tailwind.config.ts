@@ -47,6 +47,21 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "left-lean": {
+          DEFAULT: "hsl(var(--left-lean))",
+          foreground: "hsl(var(--left-lean-foreground))",
+          subtle: "hsl(var(--left-lean-subtle))",
+        },
+        "center-lean": {
+          DEFAULT: "hsl(var(--center-lean))",
+          foreground: "hsl(var(--center-lean-foreground))",
+          subtle: "hsl(var(--center-lean-subtle))",
+        },
+        "right-lean": {
+          DEFAULT: "hsl(var(--right-lean))",
+          foreground: "hsl(var(--right-lean-foreground))",
+          subtle: "hsl(var(--right-lean-subtle))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
