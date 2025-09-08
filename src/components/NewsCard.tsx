@@ -56,10 +56,7 @@ export const NewsCard = ({ article }: NewsCardProps) => {
   return (
     <Card className="group cursor-pointer transition-all duration-200 hover:shadow-[var(--news-card-hover-shadow)] shadow-[var(--news-card-shadow)]">
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <Badge className={`${getBiasColor(article.bias)} text-xs font-medium`}>
-            {getBiasLabel(article.bias)}
-          </Badge>
+        <div className="flex items-end justify-end gap-1 mb-2">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
             {formatDate(article.publishedAt)}

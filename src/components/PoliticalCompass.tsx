@@ -45,9 +45,22 @@ export const PoliticalCompass = ({ leftScore, centerScore, rightScore, totalVote
     return "bg-center-lean text-center-lean-foreground";
   };
 
+  // Calculate position for single bar (-50 to +50, where -50 is far left, 0 is center, +50 is far right)
+  const getCompassPosition = () => {
+    if (totalVotes === 0) return 0;
+    const totalWeight = leftScore + rightScore + centerScore;
+    if (totalWeight === 0) return 0;
+    
+    // Weight the positions: left = -1, center = 0, right = +1
+    const weightedScore = (rightScore - leftScore) / totalWeight;
+    return Math.max(-50, Math.min(50, weightedScore * 50));
+  };
+
+  const position = getCompassPosition();
+
   return (
     <div className="bg-card rounded-lg p-6 shadow-[var(--news-card-shadow)] mb-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-semibold">Political Compass</h2>
           <p className="text-sm text-muted-foreground">
@@ -62,42 +75,27 @@ export const PoliticalCompass = ({ leftScore, centerScore, rightScore, totalVote
         </Badge>
       </div>
 
-      <div className="space-y-3">
-        {/* Left leaning */}
-        <div className="flex items-center gap-3">
-          <div className="w-16 text-sm font-medium text-left-lean">Left</div>
-          <div className="flex-1 bg-left-lean-subtle rounded-full h-3">
-            <div 
-              className="bg-left-lean h-full rounded-full transition-all duration-500"
-              style={{ width: `${leftPercent}%` }}
-            />
-          </div>
-          <div className="w-12 text-sm text-right font-medium">{leftScore}</div>
+      {/* Single Political Compass Bar */}
+      <div className="relative">
+        <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+          <span>Liberal</span>
+          <span>Moderate</span>
+          <span>Conservative</span>
         </div>
-
-        {/* Center */}
-        <div className="flex items-center gap-3">
-          <div className="w-16 text-sm font-medium text-center-lean">Center</div>
-          <div className="flex-1 bg-center-lean-subtle rounded-full h-3">
-            <div 
-              className="bg-center-lean h-full rounded-full transition-all duration-500"
-              style={{ width: `${centerPercent}%` }}
-            />
-          </div>
-          <div className="w-12 text-sm text-right font-medium">{centerScore}</div>
+        
+        <div className="relative h-4 bg-gradient-to-r from-left-lean via-center-lean to-right-lean rounded-full overflow-hidden">
+          {/* Position indicator */}
+          <div 
+            className="absolute top-0 w-4 h-4 bg-white border-2 border-foreground rounded-full shadow-lg transition-all duration-[2000ms] ease-out"
+            style={{ 
+              left: `calc(${((position + 50) / 100) * 100}% - 8px)`,
+              transform: 'translateY(0)'
+            }}
+          />
         </div>
-
-        {/* Right leaning */}
-        <div className="flex items-center gap-3">
-          <div className="w-16 text-sm font-medium text-right-lean">Right</div>
-          <div className="flex-1 bg-right-lean-subtle rounded-full h-3">
-            <div 
-              className="bg-right-lean h-full rounded-full transition-all duration-500"
-              style={{ width: `${rightPercent}%` }}
-            />
-          </div>
-          <div className="w-12 text-sm text-right font-medium">{rightScore}</div>
-        </div>
+        
+        {/* Center line */}
+        <div className="absolute top-6 left-1/2 w-px h-4 bg-muted-foreground/30 transform -translate-x-px" />
       </div>
 
       {totalVotes === 0 && (
