@@ -48,7 +48,7 @@ export const SwipeCard = ({ article, onSwipe, onTap, index }: SwipeCardProps) =>
   };
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const swipeThreshold = 100;
+    const swipeThreshold = 60;
     if (info.offset.x > swipeThreshold) {
       onSwipe("right", article);
     } else if (info.offset.x < -swipeThreshold) {
@@ -67,7 +67,7 @@ export const SwipeCard = ({ article, onSwipe, onTap, index }: SwipeCardProps) =>
       animate={{ 
         scale: 1 - index * 0.05,
         y: index * 10,
-        opacity: 1 - index * 0.3 
+        opacity: index === 0 ? 1 : 0, 
       }}
       exit={{
         x: 300,
@@ -76,7 +76,6 @@ export const SwipeCard = ({ article, onSwipe, onTap, index }: SwipeCardProps) =>
       }}
       initial={{ x: 300, opacity: 0 }}
       whileInView={{ x: 0, opacity: 1 }}
-      onClick={() => onTap(article)}
     >
       {/* Swipe indicators */}
       <motion.div 
@@ -106,9 +105,6 @@ export const SwipeCard = ({ article, onSwipe, onTap, index }: SwipeCardProps) =>
       <Card className="h-full shadow-[var(--news-card-shadow)] border-2 bg-card">
         <CardHeader className="pb-4">
           <div className="flex items-start justify-between gap-3 mb-3">
-            <Badge className={`${getBiasColor(article.bias)} text-xs font-medium`}>
-              {getBiasLabel(article.bias)}
-            </Badge>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
               {formatDate(article.publishedAt)}
@@ -137,11 +133,8 @@ export const SwipeCard = ({ article, onSwipe, onTap, index }: SwipeCardProps) =>
             </p>
             
             <div className="flex items-center justify-between pt-4 border-t">
-              <div className="text-sm font-medium text-foreground">
-                {article.source}
-              </div>
-              <div className="text-xs text-muted-foreground">
-                Swipe → Approve • Swipe ← Reject
+              <div className="text-xs text-muted-foreground text-center">
+                Swipe → Favorable Source • Swipe ← Unfavorable Source
               </div>
             </div>
           </div>

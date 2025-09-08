@@ -1,4 +1,3 @@
-// src/pages/Index.tsx (Vite/React)
 import { useMemo, useState } from "react";
 import { NewsHeader } from "@/components/NewsHeader";
 import { PoliticalCompass } from "@/components/PoliticalCompass";
@@ -7,26 +6,18 @@ import type { NewsArticle } from "@/types/news";
 import { useNews } from "@/hooks/useNews";
 
 const Index = () => {
-  // live news from API (via the Vite-compatible hook)
   const { articles, loading, isError } = useNews({ country: "us", pageSize: 30 });
 
-  // votes: id -> approved (idempotent; last swipe wins)
   const [votes, setVotes] = useState<Record<string, boolean>>({});
-
-  const handleVote = (article: NewsArticle, approved: boolean) => {
+  const handleVote = (article: NewsArticle, approved: boolean) =>
     setVotes(prev => ({ ...prev, [article.id]: approved }));
-  };
-
   const handleReset = () => setVotes({});
 
-  // compute scores from current votes against current article list
   const { leftScore, centerScore, rightScore, totalVotes } = useMemo(() => {
     let left = 0, center = 0, right = 0;
-
     Object.entries(votes).forEach(([id, approved]) => {
       const a = articles.find(x => x.id === id);
       if (!a) return;
-
       if (approved) {
         if (a.bias === "left") left += 1;
         else if (a.bias === "center") center += 1;
@@ -37,7 +28,6 @@ const Index = () => {
         else { left += 0.5; center += 0.5; }
       }
     });
-
     return {
       leftScore: Math.round(left),
       centerScore: Math.round(center),
@@ -49,7 +39,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[var(--news-gradient-subtle)]">
       <NewsHeader />
-
       <main className="container mx-auto px-4 py-8">
         <PoliticalCompass
           leftScore={leftScore}
@@ -61,31 +50,21 @@ const Index = () => {
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-2">Discover Your Political Compass</h2>
           <p className="text-muted-foreground max-w-md mx-auto">
-            Swipe right (→) to approve articles you agree with, or swipe left (←) to reject them.
-            Tap to read the full article.
+            Swipe → approve, ← reject. Tap to read.
           </p>
         </div>
 
         <div className="flex justify-center pb-16 min-h-[240px]">
           {loading && <div className="text-muted-foreground">Loading news…</div>}
           {isError && <div className="text-destructive">Failed to load news.</div>}
-          {!loading && !isError && (
-            <SwipeStack
-              articles={articles}
-              onVote={handleVote}
-              onReset={handleReset}
-            />
+          {!loading && !isError && articles.length > 0 && (
+            <SwipeStack articles={articles} onVote={handleVote} onReset={handleReset} />
+          )}
+          {!loading && !isError && articles.length === 0 && (
+            <div className="text-muted-foreground">No articles available.</div>
           )}
         </div>
       </main>
-
-      <footer className="bg-card border-t py-6">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground text-sm">
-            Your compass reflects your reaction to different news perspectives • Results are for entertainment only
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { SwipeCard } from "./SwipeCard";
-import { NewsArticle } from "./NewsCard";
+import type { NewsArticle } from "@/types/news";
 import { Button } from "@/components/ui/button";
 import { RotateCcw, ExternalLink } from "lucide-react";
 
@@ -55,7 +55,7 @@ export const SwipeStack = ({ articles, onVote, onReset }: SwipeStackProps) => {
   return (
     <div className="relative h-96 w-full max-w-md mx-auto">
       <AnimatePresence mode="popLayout">
-        {remainingArticles.map((article, index) => (
+        {remainingArticles.slice(0, 1).map((article, index) => (
           <SwipeCard
             key={`${article.id}-${currentIndex}`}
             article={article}
